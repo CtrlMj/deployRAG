@@ -17,3 +17,9 @@ spec:
         image: pdf-chatbot:latest
         ports:
         - containerPort: 8501
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: openai-secret
+              key: OPENAI_API_KEY
