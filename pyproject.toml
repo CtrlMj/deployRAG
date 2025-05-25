@@ -1,0 +1,10 @@
+[project]
+name = "deployrag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pypdf>=5.5.0",
+    "python-dotenv>=1.1.0",
+]
