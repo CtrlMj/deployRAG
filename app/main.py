@@ -8,19 +8,20 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from dotenv import load_dotenv
 
-
+load_dotenv()
 #function to load the vectordatabase
 def load_knowledgeBase():
-    embeddings=OpenAIEmbeddings(api_key="Enter your api key")
-    DB_FAISS_PATH = 'vectorstore/db_faiss'
-    db = FAISS.load_local(DB_FAISS_PATH, embeddings)
+    embeddings=OpenAIEmbeddings()
+    DB_FAISS_PATH = './vectorstore/db_faiss'
+    db = FAISS.load_local(DB_FAISS_PATH, embeddings, allow_dangerous_deserialization=True)
     return db
         
 #function to load the OPENAI LLM
 def load_llm():
     from langchain_openai import ChatOpenAI
-    llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, api_key="Enter your api key")
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0,)
     return llm
 
 #creating prompt template using langchain
@@ -52,7 +53,7 @@ if __name__=='__main__':
     if (query):
         #getting only the chunks that are similar to the query for llm to produce the output
         similar_embeddings = knowledgeBase.similarity_search(query)
-        similar_embeddings = FAISS.from_documents(documents=similar_embeddings, embedding=OpenAIEmbeddings(api_key="Enter your api key"))
+        similar_embeddings = FAISS.from_documents(documents=similar_embeddings, embedding=OpenAIEmbeddings())
         #creating the chain for integrating llm,prompt,stroutputparser
         retriever = similar_embeddings.as_retriever()
         rag_chain = (
