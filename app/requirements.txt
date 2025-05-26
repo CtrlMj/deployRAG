@@ -5,3 +5,4 @@ openai
 langchain-community
 langchain-openai
 pypdf
+prometheus_client
