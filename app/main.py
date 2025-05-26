@@ -11,7 +11,8 @@ from langchain_core.runnables import RunnablePassthrough
 import os
 import threading
 from prometheus_client import start_http_server
-from metrics import chat_requests_total
+from metrics import chat_requests_total, chat_request_latency_seconds, chat_request_tokens
+import time
 # from dotenv import load_dotenv
 
 # load_dotenv()
@@ -58,6 +59,7 @@ if __name__=='__main__':
     if (query):
         # incrementing the counter for each chat request
         chat_requests_total.inc()
+        start_time = time.time()
         #getting only the chunks that are similar to the query for llm to produce the output
         similar_embeddings = knowledgeBase.similarity_search(query)
         similar_embeddings = FAISS.from_documents(documents=similar_embeddings, embedding=OpenAIEmbeddings(api_key=os.getenv('OPENAI_API_KEY')))
@@ -67,11 +69,13 @@ if __name__=='__main__':
                 {"context": retriever | format_docs, "question": RunnablePassthrough()}
                 | prompt
                 | llm
-                | StrOutputParser()
             )
         
         response = rag_chain.invoke(query)
-        sl.write(response)
+        latency = time.time() - start_time
+        chat_request_latency_seconds.observe(latency)
+        chat_request_tokens.observe(response.usage_metadata['total_tokens'])
+        sl.write(response.content)
             
         
         
