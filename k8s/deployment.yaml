@@ -15,6 +15,7 @@ spec:
       containers:
       - name: pdf-chatbot
         image: pdf-chatbot:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8501
         env:
