@@ -44,7 +44,11 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 
-chat_request_total = Counter('chat_requests_total', 'Total number of chat requests')
+if 'chat_requests_total' not in sl.session_state:
+    sl.session_state.chat_requests_total = Counter(
+        'chat_requests_total',
+        'Total number of chat requests'
+    )
 if __name__=='__main__':
     threading.Thread(target=start_http_server, args=(8502,), daemon=True).start()
     sl.header("welcome to the 📝PDF bot")
@@ -58,7 +62,7 @@ if __name__=='__main__':
     
     if (query):
         # incrementing the counter for each chat request
-        chat_requests_total.inc()
+        sl.session_state.chat_requests_total.inc()
         #getting only the chunks that are similar to the query for llm to produce the output
         similar_embeddings = knowledgeBase.similarity_search(query)
         similar_embeddings = FAISS.from_documents(documents=similar_embeddings, embedding=OpenAIEmbeddings(api_key=os.getenv('OPENAI_API_KEY')))
