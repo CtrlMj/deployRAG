@@ -3,26 +3,31 @@
 ## Step 1: Start docker daemon
 
 ## Step 2: Start minikube
-``` minikube start
+``` 
+minikube start
 ```
 
 ## Step 3: Build Docker image within minikube
 
-```eval $(minikube docker-env)
+```
+eval $(minikube docker-env)
 docker build -t pdf-chatbot:latest .
 ```
 ## Step 4: add your openai token as secret
-```kubectl create secret generic openai-secret --from-literal=OPENAI_API_KEY='your-api-key-here'
+```
+kubectl create secret generic openai-secret --from-literal=OPENAI_API_KEY='your-api-key-here'
 ```
 
 ## Step 5: Deploy to kubernetes
-```kubectl apply -f k8s/deployment.yaml
+```
+kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/hpa.yaml
 ```
 
 ## Step 6: Access the app
-```minikube service pdf-chatbot-service
+```
+minikube service pdf-chatbot-service
 or
 kubectl port-forward service/pdf-chatbot-service 8501:8501 8502:8502
 ```
@@ -40,7 +45,8 @@ kubectl port-forward service/pdf-chatbot-service 8501:8501 8502:8502
 `servicemonitoring.yaml` and `custom-values.yaml` are configured to monitor the deployments via Prometheus and Grafana.
 
 ## Step 1: Install Prometheus and Grafana from heml charts
-```brew install helm
+```
+brew install helm
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install monitoring prometheus-community/kube-prometheus-stack
@@ -48,7 +54,8 @@ helm install monitoring prometheus-community/kube-prometheus-stack
 Note that this creates kubernetes resources for Prometheus and Grafana in the "default" namespace. Pass -n flag for a different namespace (More appropriate for production)
 
 ## Step 2: Access the Grafana service
-```minikube service monitoring-grafana
+```
+minikube service monitoring-grafana
 ```
 Username: admin
 Password: prom-operator
