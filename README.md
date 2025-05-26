@@ -15,6 +15,7 @@ docker build -t pdf-chatbot:latest .
 ## Step 4: Deploy to kubernetes:
 ```kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/hpa.yaml
 ```
 
 ## Step 5: Access the app
