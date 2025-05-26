@@ -10,3 +10,7 @@ spec:
     - port: 8501
       targetPort: 8501
       nodePort: 30001
+      name: web
+    - port: 8502
+      targetPort: 8502
+      name: metrics

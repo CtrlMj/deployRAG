@@ -9,9 +9,9 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 import os
-from prometheus_client import start_http_server, Counter
 import threading
-
+from prometheus_client import start_http_server
+from metrics import chat_requests_total
 # from dotenv import load_dotenv
 
 # load_dotenv()
@@ -44,11 +44,6 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 
-if 'chat_requests_total' not in sl.session_state:
-    sl.session_state.chat_requests_total = Counter(
-        'chat_requests_total',
-        'Total number of chat requests'
-    )
 if __name__=='__main__':
     threading.Thread(target=start_http_server, args=(8502,), daemon=True).start()
     sl.header("welcome to the 📝PDF bot")
@@ -62,7 +57,7 @@ if __name__=='__main__':
     
     if (query):
         # incrementing the counter for each chat request
-        sl.session_state.chat_requests_total.inc()
+        chat_requests_total.inc()
         #getting only the chunks that are similar to the query for llm to produce the output
         similar_embeddings = knowledgeBase.similarity_search(query)
         similar_embeddings = FAISS.from_documents(documents=similar_embeddings, embedding=OpenAIEmbeddings(api_key=os.getenv('OPENAI_API_KEY')))
