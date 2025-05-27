@@ -77,5 +77,14 @@ For production, we should add more comprehensive metrics such as:
 - Setup alerts for critical metrics such as high latency, high error rate, Low availability, LLM API timeouts,etc.
 
 
+# Optimizing the chatbot
+(https://medium.com/badal-io/chat-with-your-confluence-1535e661bd3f)[checkout my medium article for more details]
 
-
+In summary, a few things to try to optimize the chatbot:
+- **Pair semantic search with elastic search**: Hybrid search that partly relies on traditional keyword search provides a safer and reliable retrieval and reduce hallucinations.
+- **Deep reranker**: Two step retrieval to 
+    - 1. Select a large pool of candidate documents
+    - 2. Use the reranker model to narrow down the documents to the few most relevant
+- **Prompt engineering**: Try various prompting strategies like stuffing, multi-turn prompting, etc. 
+- **Add memory**: This is to enable multi-turn conversations. 
+- 
