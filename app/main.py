@@ -45,6 +45,26 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 
+def process_query(query, knowledgeBase, llm, prompt):
+    chat_requests_total.inc()
+    start_time = time.time()
+    #getting only the chunks that are similar to the query for llm to produce the output
+    similar_embeddings = knowledgeBase.similarity_search(query)
+    similar_embeddings = FAISS.from_documents(documents=similar_embeddings, embedding=OpenAIEmbeddings(api_key=os.getenv('OPENAI_API_KEY')))
+    #creating the chain for integrating llm,prompt,stroutputparser
+    retriever = similar_embeddings.as_retriever()
+    rag_chain = (
+            {"context": retriever | format_docs, "question": RunnablePassthrough()}
+            | prompt
+            | llm
+        )
+    
+    response = rag_chain.invoke(query)
+    latency = time.time() - start_time
+    chat_request_latency_seconds.observe(latency)
+    chat_request_tokens.observe(response.usage_metadata['total_tokens'])
+    return response.content
+
 if __name__=='__main__':
     threading.Thread(target=start_http_server, args=(8502,), daemon=True).start()
     sl.header("welcome to the 📝PDF bot")
@@ -57,25 +77,8 @@ if __name__=='__main__':
     
     
     if (query):
-        # incrementing the counter for each chat request
-        chat_requests_total.inc()
-        start_time = time.time()
-        #getting only the chunks that are similar to the query for llm to produce the output
-        similar_embeddings = knowledgeBase.similarity_search(query)
-        similar_embeddings = FAISS.from_documents(documents=similar_embeddings, embedding=OpenAIEmbeddings(api_key=os.getenv('OPENAI_API_KEY')))
-        #creating the chain for integrating llm,prompt,stroutputparser
-        retriever = similar_embeddings.as_retriever()
-        rag_chain = (
-                {"context": retriever | format_docs, "question": RunnablePassthrough()}
-                | prompt
-                | llm
-            )
-        
-        response = rag_chain.invoke(query)
-        latency = time.time() - start_time
-        chat_request_latency_seconds.observe(latency)
-        chat_request_tokens.observe(response.usage_metadata['total_tokens'])
-        sl.write(response.content)
+        answer = process_query(query, knowledgeBase, llm, prompt)
+        sl.write(answer)
             
         
         
