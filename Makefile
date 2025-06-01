@@ -1,10 +1,22 @@
 # Makefile for PDF Chatbot Project
 
-.PHONY: all test lint format check k8s-validate
+.PHONY: all test-unit test-integration test-monitoring test lint format check k8s-validate
 
 # Default target: run all checks
 all: test lint
 
+test-unit:
+	@echo "Running unit tests with pytest..."
+	pytest tests/unit
+
+test-integration:
+	@echo "Running integration tests with pytest..."
+	pytest tests/integration
+
+test-monitoring:
+	@echo "Running monitoring tests with pytest..."
+	pytest tests/monitoring
+	
 # Run all tests with pytest
 test:
 	@echo "Running tests..."
