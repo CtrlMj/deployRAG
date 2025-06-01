@@ -12,10 +12,10 @@ def test_call_knowledgeBase():
         mock_faiss_instance = MagicMock()
         mock_faiss_class.load_local.return_value = mock_faiss_instance
 
-        kb = load_knowledgeBase()
+        kb = load_knowledgeBase(db_faiss_path="app/vectorstore/db_faiss")
 
         mock_faiss_class.load_local.assert_called_once_with(
-            './vectorstore/db_faiss',
+            "app/vectorstore/db_faiss",
             mock_embed_instance,
             allow_dangerous_deserialization=True
         )
