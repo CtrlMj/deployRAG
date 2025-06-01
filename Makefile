@@ -7,20 +7,20 @@ all: test lint
 
 test-unit:
 	@echo "Running unit tests with pytest..."
-	pytest tests/unit
+	python -m pytest tests/unit
 
 test-integration:
 	@echo "Running integration tests with pytest..."
-	pytest tests/integration
+	python -m pytest tests/integration
 
 test-monitoring:
 	@echo "Running monitoring tests with pytest..."
-	pytest tests/monitoring
-	
+	python -m pytest tests/monitoring
+
 # Run all tests with pytest
 test:
 	@echo "Running tests..."
-	pytest tests/
+	python -m pytest tests/
 
 # Run flake8 linting
 lint:
