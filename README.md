@@ -106,5 +106,5 @@ If there are several sources of information, we can potential set a up a tool fo
 # Testing to be added
 - unit
 - integration
- - end-to-end (mock llm)
+- end-to-end (mock llm)
 
