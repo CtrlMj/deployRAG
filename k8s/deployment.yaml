@@ -11,10 +11,10 @@ spec:
     metadata:
       labels:
         app: pdf-chatbot
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8502"
-        prometheus.io/path: "/metrics"
+      # annotations:
+      #   prometheus.io/scrape: "true"
+      #   prometheus.io/port: "8502"
+      #   prometheus.io/path: "/metrics"
     spec:
       containers:
       - name: pdf-chatbot
