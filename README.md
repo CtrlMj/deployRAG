@@ -44,7 +44,7 @@ kubectl port-forward service/pdf-chatbot-service 8501:8501 8502:8502
 # Monitoring
 `servicemonitoring.yaml` and `custom-values.yaml` are configured to monitor the deployments via Prometheus and Grafana.
 
-### Step 1: Install Prometheus and Grafana from heml charts
+### Step 1: Install Prometheus and Grafana from helm charts
 ```
 brew install helm
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -102,9 +102,4 @@ In summary, a few things to try to optimize the chatbot:
 - **Agentic framework**: Currently the chatbot returns a simple fallback response "I don't know what you're asking about".
 We can improve user experience by using the entire RAG system as a tool so the bot can answer general questions as well.
 If there are several sources of information, we can potential set a up a tool for each and create a network of agents with an LLM as the router which would direct the query to the correct agent. Langgraph is one framework that naturally lends itself to this architecture.
-
-# Testing to be added
-- unit
-- integration
-- end-to-end (mock llm)
 
