@@ -31,7 +31,7 @@ jobs:
         run: |
           cd app
           streamlit run main.py &
-          sleep 10  # wait for the server to start
+          sleep 20  # wait for the server to start
           cd ..
           python -m pytest tests/monitoring
 
