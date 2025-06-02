@@ -1,5 +1,5 @@
 import pytest
-from app.main import format_docs
+from main import format_docs
 
 class MockDocument:
     def __init__(self, content):
