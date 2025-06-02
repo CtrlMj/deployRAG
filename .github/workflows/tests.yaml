@@ -30,7 +30,7 @@ jobs:
       - name: Run monitoring tests
         run: |
           cd app
-          streamlit run main.py &
+          nohup streamlit run main.py > streamlit.log 2>&1 &
           sleep 20  # wait for the server to start
           cd ..
           python -m pytest tests/monitoring
