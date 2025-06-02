@@ -1,0 +1,43 @@
+name: CI for PDF Chatbot
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests unit and integration tests
+        run: |
+          python -m pytest tests/unit
+          python -m pytest tests/integration
+
+      - name: run linter
+        run: make lint
+      
+      - name: Run monitoring tests
+        run: |
+          cd app
+          streamlit run main.py &
+          sleep 10  # wait for the server to start
+          cd ..
+          python -m pytest tests/monitoring
+
+      # - name: validate k8s manifests
+      #   run: make k8s-validate
+
+    # set fetch OPENAI_API_KEY from github secrets
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
