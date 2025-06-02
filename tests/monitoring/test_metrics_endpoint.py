@@ -1,7 +1,5 @@
 import requests
-import requests
 from main import create_rag_chain
-from langchain_core.runnables import RunnablePassthrough
 
 
 def test_metrics_endpoint_reachable():

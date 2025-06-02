@@ -22,11 +22,10 @@ test:
 	@echo "Running tests..."
 	python -m pytest tests/
 
-# Run flake8 linting
+# Run ruff linting
 lint:
-	@echo "Running flake8 lint check..."
-	flake8 app/main.py tests/ --max-line-length=88 --exclude=.venv
-
+	@echo "Running ruff lint check..."
+	ruff check .
 # Format code with black
 format:
 	@echo "Formatting code with black..."

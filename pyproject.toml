@@ -11,6 +11,7 @@ dependencies = [
     "pypdf>=5.5.0",
     "pytest>=8.3.5",
     "python-dotenv>=1.1.0",
+    "ruff>=0.11.12",
 ]
 
 
@@ -22,3 +23,16 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 pythonpath = ["app"]
+
+
+[tool.ruff]
+lint.ignore = ["F401", "E501", "F841"]
+line-length = 120
+exclude = [
+    "migrations",
+    "docs",
+    "venv",
+    ".venv",
+    ".git",
+    "__pycache__",
+]
