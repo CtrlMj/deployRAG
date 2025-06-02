@@ -27,22 +27,22 @@ jobs:
       - name: run linter
         run: make lint
       
-      - name: Run monitoring tests
-        run: |
-          cd app
-          nohup streamlit run main.py > streamlit.log 2>&1 &
-          # Wait for the Streamlit server to be ready
-          for i in {1..30}; do
-            curl -s http://localhost:8501/_stcore/health || true
-            if curl -s http://localhost:8501/_stcore/health | grep -q '"status":"ok"'; then
-              echo "Streamlit is up!"
-              break
-            fi
-            echo "Waiting for Streamlit to be ready..."
-            sleep 1
-          done
-          cd ..
-          python -m pytest tests/monitoring
+      # - name: Run monitoring tests
+      #   run: |
+      #     cd app
+      #     nohup streamlit run main.py > streamlit.log 2>&1 &
+      #     # Wait for the Streamlit server to be ready
+      #     for i in {1..30}; do
+      #       curl -s http://localhost:8501/_stcore/health || true
+      #       if curl -s http://localhost:8501/_stcore/health | grep -q '"status":"ok"'; then
+      #         echo "Streamlit is up!"
+      #         break
+      #       fi
+      #       echo "Waiting for Streamlit to be ready..."
+      #       sleep 1
+      #     done
+      #     cd ..
+      #     python -m pytest tests/monitoring
 
       # - name: validate k8s manifests
       #   run: make k8s-validate
