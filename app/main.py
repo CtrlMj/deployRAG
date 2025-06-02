@@ -11,13 +11,13 @@ from langchain_core.runnables import RunnablePassthrough
 import os
 import threading
 from prometheus_client import start_http_server
-from app.custom_metrics import chat_requests_total, chat_request_latency_seconds, chat_request_tokens
+from custom_metrics import chat_requests_total, chat_request_latency_seconds, chat_request_tokens
 import time
 # from dotenv import load_dotenv
 
 # load_dotenv()
 #function to load the vectordatabase
-def load_knowledgeBase(db_faiss_path='app/vectorstore/db_faiss'):
+def load_knowledgeBase(db_faiss_path='./vectorstore/db_faiss'):
     embeddings=OpenAIEmbeddings(api_key=os.getenv('OPENAI_API_KEY'))
     db = FAISS.load_local(db_faiss_path, embeddings, allow_dangerous_deserialization=True)
     return db
