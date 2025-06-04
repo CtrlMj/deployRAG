@@ -23,6 +23,7 @@ kubectl create secret generic openai-secret --from-literal=OPENAI_API_KEY='your-
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/hpa.yaml
+kubectl apply -f k8s/servicemonitor.yaml
 ```
 
 ### Step 6: Access the app
