@@ -49,7 +49,7 @@ kubectl port-forward service/pdf-chatbot-service 8501:8501 8502:8502
 brew install helm
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm install monitoring prometheus-community/kube-prometheus-stack
+helm install monitoring prometheus-community/kube-prometheus-stack -f k8s/custom-values.yaml
 ```
 Note that this creates kubernetes resources for Prometheus and Grafana in the "default" namespace. Pass -n flag for a different namespace (More appropriate for production)
 
