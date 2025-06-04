@@ -1,6 +1,8 @@
 # import Essential dependencies
 import streamlit as sl
 from langchain_community.vectorstores import FAISS
+from langchain_community.vectorstores import ElasticsearchStore
+from langchain.retrievers import EnsembleRetriever
 from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.prompts import ChatPromptTemplate
@@ -27,7 +29,13 @@ def load_knowledgeBase(db_faiss_path="./vectorstore/db_faiss"):
     )
     return db
 
-
+def load_elasticsearch(es_url="http://localhost:9200", index_name="pdf-index"):
+    es_store = ElasticsearchStore(
+        index_name="pdf-index",
+        es_url="http://elasticsearch.default.svc.cluster.local:9200",
+        embedding=None  # For keyword-based search
+    )
+    return es_store
 # function to load the OPENAI LLM
 def load_llm():
     from langchain_openai import ChatOpenAI
@@ -55,7 +63,12 @@ def format_docs(docs):
 
 
 def create_rag_chain():
-    retriever = load_knowledgeBase().as_retriever()
+    vec_retriever = load_knowledgeBase().as_retriever()
+    es_retriever = load_elasticsearch().as_retriever()
+    retriever = EnsembleRetriever(
+        retrievers=[vec_retriever, es_retriever],
+        weights=[0.5, 0.5],
+    )
     llm = load_llm()
     prompt = load_prompt()
     rag_chain = (
